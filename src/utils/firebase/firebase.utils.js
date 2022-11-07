@@ -1,12 +1,12 @@
 // Import the functions you need from the SDKs you need
-import userEvent from "@testing-library/user-event";
 import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
   signInWithRedirect, 
   signInWithPopup, 
   GoogleAuthProvider,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from 'firebase/auth'
 import { 
   getFirestore, 
@@ -81,4 +81,10 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return
   console.log('AUTH:: ', auth)
   return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return
+  console.log('AUTH:: ', auth)
+  return await signInWithEmailAndPassword(auth, email, password)
 }
