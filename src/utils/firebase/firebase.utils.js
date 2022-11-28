@@ -12,9 +12,13 @@ import {
 } from 'firebase/auth'
 import { 
   getFirestore, 
-  doc, // for retrieve the instance
-  getDoc, // for get the data
-  setDoc // for set the data
+  doc, // for retrieve the document's instance
+  getDoc, // for get the document info
+  setDoc, // for set the document
+  collection, // for retrieve the collection's instance,
+  writeBatch, // for create transaction to db
+  query,
+  getDocs
 } from 'firebase/firestore'
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -48,28 +52,65 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 export const db = getFirestore()
 
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey)
+  const batch = writeBatch(db)
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase())
+    batch.set(docRef, object)
+  });
+
+  await batch.commit()
+  console.log('done')
+}
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef)
+  // console.log('q:: ', q)
+
+  const querySnapshot = await getDocs(q)
+  // console.log('querySnapshot:: ', querySnapshot)
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data()
+    acc[title.toLowerCase()] = items
+    return acc
+  }, {})
+
+  return categoryMap
+}
+
 // check if the user was created on db
 // if its not, then setDoc to db. insert the user data
 // else it just return the userDocRef from the db
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
   if (!userAuth) return
 
+  // console.log('userAuth id:: ', userAuth.uid)
+  // check user document reference
+  // doc(*database*, *collection_name*, *document_name_or_key*)
   const userDocRef = doc(db, 'users', userAuth.uid)
-  console.log(userDocRef)
+  // console.log('userDocRef:: ', userDocRef)
+  // getDoc to reach that document
   const userSnapshot = await getDoc(userDocRef)
-  console.log(userSnapshot.exists())
+  // console.log('userSnapshot:: ', userSnapshot.data())
+  // console.log('userSnapshot exists:: ', userSnapshot.exists())
 
   if (!userSnapshot.exists()) {
     const { displayName, email } = userAuth
     const createdAt = new Date()
 
     try {
+      // setDoc to create that document and its data. Although collection is not there, it will be created too. 
+      // setDoc created based on userDocRef
       await setDoc(userDocRef, {
         displayName,
         email,
         createdAt,
         ...additionalInfo
       })
+      console.log('user created')
     } catch(err) {
       console.log('error creating the user', err.message)
     }
