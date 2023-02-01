@@ -26,6 +26,12 @@ export const CheckoutItemContainer = styled.div`
       margin: 0 10px;
     }
   }
+
+  .remove-button {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `
 
 export const CheckoutItemImageContainer = styled.div`

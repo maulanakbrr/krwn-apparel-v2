@@ -1,7 +1,7 @@
 // import { getRedirectResult } from 'firebase/auth'
 import SignUpForm from "../../components/sing-up-form/sign-up-form.component"
 import SignInForm from "../../components/sign-in-form/sign-in-form.component"
-import './authentication.styles.scss'
+import { AuthenticationContainer } from "./authentication.styles"
 
 const Authentication = () => {
 
@@ -23,14 +23,14 @@ const Authentication = () => {
   // }, [])
 
   return (
-    <div className="authentication-container">
+    <AuthenticationContainer>
       {/* Section for sign in using google redirect */}
       {/* <button onClick={signInWithGoogleRedirect}>
         Sign in with Google Redirect
       </button> */}
       <SignInForm/>
       <SignUpForm/>
-    </div>
+    </AuthenticationContainer>
   )
 }
 
