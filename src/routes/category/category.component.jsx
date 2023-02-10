@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, Fragment } from "react"
+import React, { useContext, useEffect, useState, Fragment } from "react"
 import { useParams } from "react-router-dom"
 
 import ProductCard from "../../components/product-card/product-card.component"

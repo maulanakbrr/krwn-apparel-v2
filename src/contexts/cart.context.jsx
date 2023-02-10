@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 const addCartItem = (cartItems, productToAdd) => {
   let newCartItem
@@ -39,7 +39,7 @@ export const CartContext = createContext({
   addItemToCart: () => null,
   totalCount: 0,
   removeItemFromCart: () => null,
-  deleteItemFromCart: () => null,
+  deleteItemFromCart: () => null, 
   cartTotal:0
 })
 

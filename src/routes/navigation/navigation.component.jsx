@@ -1,4 +1,4 @@
-import { Fragment, useContext } from "react"
+import React, { Fragment, useContext } from "react"
 import { Link, Outlet } from "react-router-dom"
 import { ReactComponent as KrwnLogo } from '../../assets/krown.svg'
 import { UserContext } from "../../contexts/user.context"

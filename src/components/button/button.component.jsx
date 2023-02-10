@@ -1,3 +1,4 @@
+import React from 'react'
 import { ButtonStyle } from './button.styles'
 
 const Button = ({children, buttonType, ...otherProps}) => {
