@@ -49,10 +49,11 @@ export const CartProvider = ({children}) => {
   const [totalCount, setTotalCount] = useState(0)
   const [cartTotal, setCartTotal] = useState(0)
 
-  useEffect(() => {
-    handleTotalCount()
-    handleTotalPrice()
-  }, [cartItems])
+  // commented
+  // useEffect(() => {
+  //   handleTotalCount()
+  //   handleTotalPrice()
+  // }, [cartItems])
 
   const handleCart = () => {
     setIsCartOpen(!isCartOpen)
