@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/firebase/firebase.utils'
-import FormInput from '../form-input/form-input.component'
-import Button from '../button/button.component'
 import { useNavigate } from 'react-router-dom'
+import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/firebase/firebase.utils'
+import Button from '../button/button.component'
+import FormInput from '../form-input/form-input.component'
 import { SignUpFormContainer } from './sign-up-form.styles'
-import { useDispatch } from 'react-redux'
-import { setUser } from '../../redux/user/userSlice'
 
 const defaultFormFields = {
   displayName: '',
@@ -18,12 +16,6 @@ const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields)
   const { displayName, email, password, confirmPassword } = formFields
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-
-  const setDataToCurrentUser = data => {
-    const { accessToken, displayName, email, uid } = data
-    dispatch(setUser({accessToken, displayName, email, uid}))
-  }
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields)
@@ -48,7 +40,6 @@ const SignUpForm = () => {
     try {
       const {user} = await createAuthUserWithEmailAndPassword(email, password)
       await createUserDocumentFromAuth(user, { displayName })
-      setDataToCurrentUser(user)
       console.log({ user })
       resetFormFields()
       navigate('/')

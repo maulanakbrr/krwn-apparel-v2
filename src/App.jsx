@@ -1,20 +1,13 @@
-import React, { useEffect} from "react";
-import { Routes, Route } from "react-router-dom";
-import Navigation from "./routes/navigation/navigation.component";
-import HomePage from "./routes/home/home.component";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import Authentication from "./routes/authentication/authentication.component";
-import Shop from "./routes/shop/shop.component";
 import Checkout from "./routes/checkout/checkout.component";
-import { useDispatch } from "react-redux";
-import { fetchCategoriesAndDocuments } from "./redux/categories/categoriesSlice";
+import HomePage from "./routes/home/home.component";
+import Navigation from "./routes/navigation/navigation.component";
+import Shop from "./routes/shop/shop.component";
 
 const App = () => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(fetchCategoriesAndDocuments())
-  }, [])
-
+  
   return (
     <Routes>
       <Route path='/' element={<Navigation/>}>
