@@ -7,19 +7,28 @@ import FormInput from '../form-input/form-input.component'
 import Button from '../button/button.component'
 import { useNavigate } from 'react-router-dom'
 import { SignInFormContainer, SignInFormButtonContainer } from './sign-in-form-styles'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../redux/user/userSlice'
 
 const defaultFormFields = {
-  email: '',
+  emailUser: '',
   password: ''
 }
 
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields)
-  const { email, password } = formFields
+  const { emailUser, password } = formFields
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const setDataToCurrentUser = data => {
+    const { accessToken, displayName, email, uid } = data
+    dispatch(setUser({accessToken, displayName, email, uid}))
+  }
 
   const signInWithGoogle = async () => {
-    await signInWithGooglePopup()
+    const { user } = await signInWithGooglePopup()
+    setDataToCurrentUser(user)
     navigate('/')
   }
 
@@ -39,8 +48,9 @@ const SignInForm = () => {
     e.preventDefault()
     
     try {
-      const { user } = await signInAuthUserWithEmailAndPassword(email, password)
-      console.log(user)
+      const { user } = await signInAuthUserWithEmailAndPassword(emailUser, password)
+      setDataToCurrentUser(user)
+      console.log('USER:: ', user)
       resetFormFields()
       navigate('/')
     } catch(error) {
@@ -66,8 +76,8 @@ const SignInForm = () => {
         <FormInput 
           label='Email'
           type= 'email'
-          name= "email" 
-          value={email}
+          name= "emailUser" 
+          value={emailUser}
           onChange={handleChange}
           required={true}
         />
