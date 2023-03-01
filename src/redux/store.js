@@ -39,7 +39,7 @@ export const store = configureStore({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
-  }).concat(logger),
+  }).concat(middleWares),
 })
 
-export const persistor = persistStore(middleWares)
+export const persistor = persistStore(store)

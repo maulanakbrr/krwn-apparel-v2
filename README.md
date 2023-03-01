@@ -14,3 +14,5 @@ It used `React Context` for state management.
 - Migrate state management from `React Context` to `Redux Toolkit`
 - Using `createAsyncThunk` for fetching categories data
 - Added spinner (when app still fetching categories data)
+- Installed `stripe`
+- Created functions using `netlify`
