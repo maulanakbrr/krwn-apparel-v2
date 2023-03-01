@@ -21,6 +21,10 @@ const persistConfig = {
   whitelist: ['user']
 }
 
+const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
+  Boolean
+);
+
 const rootReducer = combineReducers({
   cart: CartReducer,
   categories: CategoriesReducer,
@@ -38,4 +42,4 @@ export const store = configureStore({
   }).concat(logger),
 })
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(middleWares)
