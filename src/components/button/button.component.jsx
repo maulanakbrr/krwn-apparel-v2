@@ -1,10 +1,10 @@
 import React from 'react'
-import { ButtonStyle } from './button.styles'
+import { ButtonStyle, ButtonSpinner } from './button.styles'
 
-const Button = ({children, buttonType, ...otherProps}) => {
+const Button = ({children, buttonType, isLoading=false, ...otherProps}) => {
   return (
-    <ButtonStyle buttonType={buttonType} {...otherProps}>
-      {children}
+    <ButtonStyle disabled={isLoading} buttonType={buttonType} {...otherProps}>
+      {isLoading ? <ButtonSpinner/> : children}
     </ButtonStyle>
   )
 }
