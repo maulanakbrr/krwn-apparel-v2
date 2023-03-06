@@ -16,3 +16,7 @@ It used `React Context` for state management.
 - Added spinner (when app still fetching categories data)
 - Installed `stripe`
 - Created functions using `netlify`
+
+## V.03
+
+- migrate to `typescript`
