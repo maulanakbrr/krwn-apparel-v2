@@ -21,7 +21,7 @@ const persistConfig = {
   whitelist: ['user']
 }
 
-const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
+const middleWares: any[] = [process.env.NODE_ENV === 'development' && logger].filter(
   Boolean
 );
 
@@ -30,6 +30,8 @@ const rootReducer = combineReducers({
   categories: CategoriesReducer,
   user: UserReducer
 })
+
+export type RootState = ReturnType<typeof rootReducer>
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 

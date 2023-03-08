@@ -1,7 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { onAuthStateChangedListener, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 
-const initialState = {
+export type CurrentUserType = {
+  displayName: string
+}
+
+export type UserState = {
+  currentUser: CurrentUserType | null
+}
+
+const initialState: UserState = {
   currentUser: null
 }
 
@@ -10,7 +18,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     unsubscribe: (state) => {
-      onAuthStateChangedListener((user) => {
+      onAuthStateChangedListener((user: any) => {
         // console.log('USER:: ', user)
         if (user) {
           createUserDocumentFromAuth(user)
