@@ -1,13 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
+export type CartItem = {
+  name: string
+  imageUrl: string
+  quantity: number
+  price: number
+  id: number
+}
+
+export type CartType = {
+  cartItems: CartItem[]
+  isCartOpen: boolean
+  totalCount: number
+  cartTotal: number
+}
+
+const initialState: CartType = {
   cartItems: [],
   isCartOpen: false,
   totalCount: 0,
   cartTotal:0
 }
 
-const addCartItem = (cartItems, productToAdd) => {
+const addCartItem = (cartItems: CartItem[], productToAdd: CartItem): CartItem[] => {
   let newCartItem
   const isCartItem = cartItems.find((item) => item.id === productToAdd.id)
   console.log('same? ', isCartItem)
@@ -29,7 +44,7 @@ const addCartItem = (cartItems, productToAdd) => {
   return newCartItem
 }
 
-const removeCartItem = (cartItems, itemToRemove) => {
+const removeCartItem = (cartItems: CartItem[], itemToRemove: CartItem): CartItem[] => {
   const isCartItem = cartItems.find((item) => item.id === itemToRemove.id && item.quantity > 1)
 
   if (isCartItem) {

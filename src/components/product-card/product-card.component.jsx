@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '../button/button.component'
-import { addItemToCart } from '../../redux/cart/cartSlice.js'
+import { addItemToCart } from '../../redux/cart/cartSlice'
 import { useDispatch } from 'react-redux'
 import { ProductCardContainer, ProductCardFooter } from './product-card.styles'
 

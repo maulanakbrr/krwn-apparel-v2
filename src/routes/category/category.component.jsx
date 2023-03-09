@@ -15,15 +15,20 @@ const Category = () => {
   const [products, setProducts] = useState(categoriesMap[category])
 
   useEffect(() => {
-    setProducts(categoriesMap[category])
-  }, [categoriesMap, category])
+    const setProductsByCategory = () => {
+      const productsByCategory = categoriesMap.find(item => item.title === category)
+      console.log('PROD', productsByCategory, categoriesMap)
+      setProducts(productsByCategory?.items)
+    }
 
-  console.log('PRODUCTS', categoriesMap[category])
+    setProductsByCategory()
+      
+  }, [categoriesMap, category])
 
   return (
     <Fragment>
       { 
-        !isLoading ? (
+        !isLoading && categoriesMap.length > 0? (
           <>
             <CategoryShopTitle>{category.toUpperCase()}</CategoryShopTitle>
             <CategoryShopContainer>

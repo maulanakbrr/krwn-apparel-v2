@@ -11,10 +11,10 @@ const CategoriesPreview = () => {
   return (
     <Fragment >
       {
-        !isLoading ? Object.keys(categoriesMap).map(title => {
-          const products = categoriesMap[title]
+        !isLoading ? categoriesMap.map(element => {
+          const { title, items } = element
           return (
-            <CategoryPreview title={title} products={products} key={title}/>
+            <CategoryPreview title={title} products={items} key={title}/>
           )
         }) : (
           <Spinner/>
