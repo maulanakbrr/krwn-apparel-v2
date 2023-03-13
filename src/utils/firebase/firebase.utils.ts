@@ -8,7 +8,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  User,
+  UserCredential,
+  NextOrObserver
 } from 'firebase/auth'
 import { 
   getFirestore, 
@@ -18,8 +21,10 @@ import {
   collection, // for retrieve the collection's instance,
   writeBatch, // for create transaction to db
   query,
-  getDocs
+  getDocs,
+  QueryDocumentSnapshot
 } from 'firebase/firestore'
+import { CategoryItem } from "../../redux/categories/categoriesSlice";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -37,7 +42,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 
 const googleProvider = new GoogleAuthProvider()
@@ -52,7 +57,11 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googlePro
 
 export const db = getFirestore()
 
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+export type ObjectToAdd = {
+  title: string
+}
+
+export const addCollectionAndDocuments = async <T extends ObjectToAdd>(collectionKey: string, objectsToAdd: T[]): Promise<void> => {
   const collectionRef = collection(db, collectionKey)
   const batch = writeBatch(db)
 
@@ -65,7 +74,11 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
   console.log('done')
 }
 
-export const getCategoriesAndDocuments = async () => {
+export type CategoryMapType = {
+  [key: string]: CategoryItem[]
+}
+
+export const getCategoriesAndDocuments = async (): Promise<CategoryMapType> => {
   const collectionRef = collection(db, 'categories');
   const q = query(collectionRef)
   // console.log('q:: ', q)
@@ -76,15 +89,25 @@ export const getCategoriesAndDocuments = async () => {
     const { title, items } = docSnapshot.data()
     acc[title.toLowerCase()] = items
     return acc
-  }, {})
+  }, {} as CategoryMapType)
 
   return categoryMap
+}
+
+export type AdditionalInformation = {
+  displayName?: string
+}
+
+export type UserData = {
+  createdAt: Date
+  displayName: string
+  email: string
 }
 
 // check if the user was created on db
 // if its not, then setDoc to db. insert the user data
 // else it just return the userDocRef from the db
-export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
+export const createUserDocumentFromAuth = async (userAuth: User, additionalInfo = {} as AdditionalInformation): Promise<QueryDocumentSnapshot<UserData> | void> => {
   if (!userAuth) return
 
   // console.log('userAuth id:: ', userAuth.uid)
@@ -112,26 +135,28 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) 
       })
       console.log('user created')
     } catch(err) {
-      console.log('error creating the user', err.message)
+      console.log('error creating the user', err)
     }
   }
 
-  return userDocRef
+  return userSnapshot as QueryDocumentSnapshot<UserData>
 }
 
 // create user with email and password function
-export const createAuthUserWithEmailAndPassword = async (email, password) => {
+export const createAuthUserWithEmailAndPassword = async (email: string, password: string): Promise<UserCredential | void> => {
   if (!email || !password) return
   console.log('AUTH:: ', auth)
   return await createUserWithEmailAndPassword(auth, email, password)
 }
 
-export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+export const signInAuthUserWithEmailAndPassword = async (email: string, password: string): Promise<UserCredential | void> => {
   if (!email || !password) return
   console.log('AUTH:: ', auth)
   return await signInWithEmailAndPassword(auth, email, password)
 }
 
-export const signOutUser = async () => await signOut(auth)
+export const signOutUser = async (): Promise<void> => await signOut(auth)
 
-export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)
+// NextOrObserver is a callback type for typescript
+// User is user type for typescript
+export const onAuthStateChangedListener = (callback: NextOrObserver<User>) => onAuthStateChanged(auth, callback)
